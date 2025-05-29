@@ -1,32 +1,32 @@
 require 'test/unit'
-require 'appium_lib'
+require 'appium_lib_core'
 require_relative '../test_utils'
 
 class DemoIosWebTest < Test::Unit::TestCase
   def setup
-    desired_caps = {
-      caps: {
-        testName: 'iOS Web Demo',
-        accessKey: TestUtils.get_access_key,
-        deviceQuery:"@os='ios'",
-        browserName: 'safari',
+    opts = {
+      capabilities: {
         platformName: 'ios',
-        appiumVersion: "1.22.3"
+        browserName: 'safari',
+        'digitalai:testName': 'iOS Web Demo',
+        'digitalai:accessKey': TestUtils.get_access_key,
+        'digitalai:deviceQuery': "@os='ios'",
+        'digitalai:appiumVersion': "2.18.0"
       },
       appium_lib: {
         server_url: TestUtils.get_url,
       }
     }
 
-    @driver = Appium::Driver.new(desired_caps, false)
-    @driver.start_driver
+    @core = Appium::Core.for(opts)
+    @driver = @core.start_driver
   end
 
   def test_iOSWebDemo
+    @driver.manage.timeouts.implicit_wait = 10
     @driver.get("https://demo-bank.ct.digital.ai/")
-
-    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
-    wait.until{@driver.find_element(:id => 'login')}
+    wait = Selenium::WebDriver::Wait.new(timeout: 10)
+    wait.until { @driver.find_element(:id, 'login') }
 
     @driver.find_element(:xpath, "//*[@data-auto='username']//input").send_keys('company')
     @driver.find_element(:xpath, "//*[@data-auto='password']//input").send_keys('company')
@@ -40,11 +40,9 @@ class DemoIosWebTest < Test::Unit::TestCase
     @driver.find_element(:xpath, "//*[@data-auto='country']").click
     @driver.find_element(:xpath, "//*[text()='India']").click
     @driver.find_element(:xpath, "//*[@data-auto='transfer-button']").click
-
-
   end
 
   def teardown
-    @driver.driver_quit
+    @driver.quit
   end
 end
