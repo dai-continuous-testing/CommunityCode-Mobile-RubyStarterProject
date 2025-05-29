@@ -13,11 +13,11 @@ cd CommunityCode-Mobile-RubyStarterProject
 * accessKey -  Personal authentication key. To learn how to obtain a key, see [Obtaining Access Key](https://docs.digital.ai/bundle/TE/page/obtaining_access_key.html).
 
 ## Running Tests
-This project requires Ruby 2.7 and higher.
+This project requires Ruby 3.1 and higher.
 
-If this is the first time running the tests, set up the dependencies.
+In the terminal, install all project gems by running:
 ```bash
-gem install appium_lib -v 11.2.0
+bundle install
 ```
 To run all tests in this project, execute to following command line: 
 

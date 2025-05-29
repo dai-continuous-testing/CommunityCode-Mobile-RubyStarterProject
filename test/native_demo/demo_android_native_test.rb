@@ -1,26 +1,27 @@
 require 'test/unit'
-require 'appium_lib'
+require 'appium_lib_core'
 require_relative '../test_utils'
 
 class DemoAndroidNativeTest < Test::Unit::TestCase
   def setup
-    desired_caps = {
-      caps: {
-        testName: 'Android Native Demo',
-        accessKey: TestUtils.get_access_key,
-        deviceQuery:"@os='android' and @category='PHONE'",
+    opts = {
+      capabilities: {
+        platformName: 'android',
+        automationName: 'UiAutomator2',
         app: 'cloud:com.experitest.ExperiBank/.LoginActivity',
         appPackage: 'com.experitest.ExperiBank',
         appActivity: '.LoginActivity',
-        appiumVersion: "1.22.3",
-        platformName: 'android'
+        'digitalai:testName': 'Android Native Demo',
+        'digitalai:accessKey': TestUtils.get_access_key,
+        'digitalai:deviceQuery': "@os='android' and @category='PHONE'",
+        'digitalai:appiumVersion': "2.18.0",
       },
       appium_lib: {
         server_url: TestUtils.get_url,
       }
     }
-    @driver = Appium::Driver.new(desired_caps, false)
-    @driver.start_driver
+    @core = Appium::Core.for(opts)
+    @driver = @core.start_driver
   end
 
   def test_AndroidNativeDemo
@@ -37,6 +38,6 @@ class DemoAndroidNativeTest < Test::Unit::TestCase
   end
 
   def teardown
-    @driver.driver_quit
+    @driver&.quit
   end
 end

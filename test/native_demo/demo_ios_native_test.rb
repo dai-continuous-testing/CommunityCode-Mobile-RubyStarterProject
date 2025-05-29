@@ -1,26 +1,27 @@
 require 'test/unit'
-require 'appium_lib'
+require 'appium_lib_core'
 require_relative '../test_utils'
 
 class DemoIOSNativeTest < Test::Unit::TestCase
   def setup
-    desired_caps = {
-      caps: {
-        testName: 'iOS Native Demo',
-        accessKey: TestUtils.get_access_key,
-        deviceQuery:"@os='ios' and @category='PHONE'",
+    opts = {
+      capabilities: {
+        platformName: 'ios',
+        automationName: 'XCUITest',
         app: 'cloud:com.experitest.ExperiBank',
         bundleId: 'com.experitest.ExperiBank',
-        appiumVersion: "1.22.3",
-        platformName: 'ios'
+        'digitalai:testName': 'iOS Native Demo',
+        'digitalai:accessKey': TestUtils.get_access_key,
+        'digitalai:deviceQuery': "@os='ios' and @category='PHONE'",
+        'digitalai:appiumVersion': "2.18.0"
       },
       appium_lib: {
         server_url: TestUtils.get_url,
       }
     }
 
-    @driver = Appium::Driver.new(desired_caps, false)
-    @driver.start_driver
+    @core = Appium::Core.for(opts)
+    @driver = @core.start_driver
   end
 
   def test_iOSNativeDemo
@@ -38,6 +39,6 @@ class DemoIOSNativeTest < Test::Unit::TestCase
   end
 
   def teardown
-    @driver.driver_quit
+    @driver&.quit
   end
 end
