@@ -20,7 +20,7 @@ class DemoAndroidNativeTest < Test::Unit::TestCase
         server_url: TestUtils.get_url,
       }
     }
-    @core = Appium::Core.for(opts) # create a core driver with `opts`
+    @core = Appium::Core.for(opts)
     @driver = @core.start_driver
   end
 
